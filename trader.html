@@ -10,7 +10,9 @@
   chart.src = "chart.js"
   document.body.append(chart);
 
-  chart.onload = () => cryptoChart("bitcoin.csv");
- 
+  chart.onload = () => {
+    cryptoChart("bitcoin.csv");
+    cryptoTrades("bitcoin-trades.csv");
+  }
 </script>
 </body>

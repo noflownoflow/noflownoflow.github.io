@@ -141,6 +141,7 @@ var fuuhistory;
 //var trades;
 //var recentTrade = 0;
 //var recentDate = 0;
+
 function cryptoChart(csvFile) {
     d3.csv(csvFile, function(error, data) {
         var accessor = candlestick.accessor(),
@@ -179,6 +180,52 @@ function cryptoChart(csvFile) {
         console.log("Render time: " + (Date.now()-timestart));
     });
 };
+
+function cryptoTrades(csvFile) {
+    d3.csv(csvFile, function(error, data) {
+        console.log(data);
+        data = data.map(function(x) {
+         return {
+           index: x["INDEX"],
+           ticker: x["TICKER"],
+           date: x["DATE"],
+           price: +x["PRICE"],
+           change24Hours: +x["HIGH-GAIN-24-HOURS"],
+           change7Days: +x["HIGH-GAIN-7-DAYS"],
+           change1Month: +x["HIGH-GAIN-1-MONTH"],
+           change3Months: +x["HIGH-GAIN-3-MONTHS"],
+           changeAllTime: +x["HIGH-GAIN-ALL-TIME"],
+         }
+        });
+        console.log(data);
+
+        d3.select("body").append("a").attr("href", "https://coinmarketcap.com/currencies/{{ticker}}").text("{{ticker}}");
+
+        d3.select("body").append("table").attr("id", "fuu");
+        var tr = d3.select("#fuu").append("tr");
+        tr.append("th").text("Date");
+        tr.append("th").text("Index");
+        tr.append("th").text("Price ($)");
+        tr.append("th").text("Gain (1 day)");
+        tr.append("th").text("Gain (7 days)");
+        tr.append("th").text("Gain (30 days)");
+        tr.append("th").text("Gain (3 months)");
+        tr.append("th").text("Gain (All Time)");
+
+        data.map(function(x) { 
+         var tr = d3.select("#fuu").append("tr")
+         tr.append("td").text( x.date );
+         tr.append("td").text( x.index );
+         tr.append("td").text( x.price );
+
+         tr.append("td").text( x.change24Hours.toFixed(2) );
+         tr.append("td").text( x.change7Days.toFixed(2) );
+         tr.append("td").text( x.change1Month.toFixed(2) );
+         tr.append("td").text( x.change3Months.toFixed(2) );
+         tr.append("td").text( x.changeAllTime.toFixed(2) );
+        });
+    });
+}
 
 function percentChange(x, y) {
     return x == 0 && y == 0 ? 0 : ((y - x) / x) * 100;

@@ -4,7 +4,15 @@
 <body>
 <script src="d3.js"></script>
 <script src="techan.js"></script>
-<script src="chart.js">
-cryptoChart("bitcoin.csv");  
+<script>
+  let chart = document.createElement('script');
+
+  chart.src = "chart.js"
+  document.body.append(chart);
+
+  script.onload = function() {
+    cryptoChart("bitcoin.csv");
+  };
+  
 </script>
 </body>
